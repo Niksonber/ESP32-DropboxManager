@@ -24,5 +24,26 @@ bool DropboxManager::download(const char * path, const char * filename, bool rep
     if(SPIFFS.exists(name) && !replace) return false;
     File f = SPIFFS.open(name, "wb+");
     // if path in dropbox isn' specified, use filename 
-    return uploadOrDownload(path, &f);
+    return uploadOrDownload(path, &f, false);
+}
+
+bool DropboxManager::uploadOrDownload(String path, File * f, bool uploadMode){
+    bool status = false;
+    HTTPClient http;
+    WiFiClientSecure client;
+    int size = uploadMode? f->size() : 0;
+
+    // begin http with correct endpoint (for upload or download)
+    http.begin(client, _endpoint + uploadMode? (String) "upload":"download");
+    // prepare http header
+    http.addHeader("Authorization", "Bearer " + _token);
+    http.addHeader("Dropbox-API-Arg", "{\"path\": \"" + path + "\"}");
+    http.addHeader("Content-Type", "application/octet-stream");
+    //http post request, if sucess and download, send file
+    int ret = http.sendRequest("POST", f, size);
+    if(ret == HTTP_CODE_OK){
+        if(!uploadMode) size = http.writeToStream(f);
+        status = size > 0 || uploadMode;
+    }
+    return status;
 }
