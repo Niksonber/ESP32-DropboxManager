@@ -3,6 +3,9 @@
 
 #include <SPIFFS.h>
 #include <string.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 
 class DropboxManager{
 public:
