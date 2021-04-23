@@ -17,3 +17,12 @@ bool DropboxManager::upload(const char * filename, const char * path){
     return uploadOrDownload(path, &f);
 }
 
+bool DropboxManager::download(const char * path, const char * filename, bool replace){
+    // if filename isn' specified, then save as path
+    const char * name = (filename == nullptr)? path: filename;
+    // check if file exists and replace replace tag
+    if(SPIFFS.exists(name) && !replace) return false;
+    File f = SPIFFS.open(name, "wb+");
+    // if path in dropbox isn' specified, use filename 
+    return uploadOrDownload(path, &f);
+}
