@@ -1,11 +1,12 @@
 #include "DropboxManager.h"
 
 DropboxManager::DropboxManager(const char * token){
-    _token = token;
+    if (token != NULL) _token = token;
 }
 
-void DropboxManager::begin(){
+void DropboxManager::begin(const char * token){
     SPIFFS.begin();
+    if (token != NULL) _token = token;
 }
 
 bool DropboxManager::upload(const char * filename, const char * path){

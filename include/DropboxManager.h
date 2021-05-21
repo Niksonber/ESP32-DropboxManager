@@ -9,8 +9,8 @@
 
 class DropboxManager{
 public:
-    DropboxManager(const char * token);
-    void begin();
+    DropboxManager(const char * token = NULL);
+    void begin(const char * token = NULL);
     bool upload(const char * filename, const char * path = nullptr);
     bool download(const char * path, const char * filename = nullptr, bool replace = false);
 protected:
