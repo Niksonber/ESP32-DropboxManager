@@ -1,0 +1,21 @@
+{
+    "name": "ESP32-DropboxManager",
+    "version": "1.0.0",
+    "description": "ESP-32 library for Dropbox handler, providing download and upload interface.",
+    "keywords": "Dropbox, Manager",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/Niksonber/ESP32-DropboxManager.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Nikson Bernardes",
+        "email": "niksonber@gmail.com",
+        "maintainer": true
+      }
+    ],
+    "frameworks": "arduino",
+    "platforms": "espressif32"
+  }
