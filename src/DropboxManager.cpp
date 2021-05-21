@@ -32,19 +32,23 @@ bool DropboxManager::uploadOrDownload(String path, File * f, bool uploadMode){
     bool status = false;
     HTTPClient http;
     WiFiClientSecure client;
+    String endpoint = _endpoint;
     int size = uploadMode? f->size() : 0;
 
-    // begin http with correct endpoint (for upload or download)
-    http.begin(client, _endpoint + uploadMode? (String) "upload":"download");
-    // prepare http header
-    http.addHeader("Authorization", "Bearer " + _token);
-    http.addHeader("Dropbox-API-Arg", "{\"path\": \"" + path + "\"}");
-    http.addHeader("Content-Type", "application/octet-stream");
-    //http post request, if sucess and download, send file
-    int ret = http.sendRequest("POST", f, size);
-    if(ret == HTTP_CODE_OK){
-        if(!uploadMode) size = http.writeToStream(f);
-        status = size > 0 || uploadMode;
+    if (WiFi.status() ==  WL_CONNECTED){
+        // begin http with correct endpoint (for upload or download)
+        endpoint +=  uploadMode?  "upload": "download";
+        http.begin(client, endpoint);
+        // prepare http header
+        http.addHeader("Authorization", "Bearer " + _token);
+        http.addHeader("Dropbox-API-Arg", "{\"path\": \"" + path + "\"}");
+        http.addHeader("Content-Type", "application/octet-stream");
+        //http post request, if sucess and download, send file
+        int ret = http.sendRequest("POST", f, size);
+        if (ret == HTTP_CODE_OK){
+            if(!uploadMode) size = http.writeToStream(f);
+            status = size > 0 || uploadMode;
+        }
     }
     return status;
 }
