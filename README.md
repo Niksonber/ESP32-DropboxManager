@@ -13,7 +13,7 @@ Then, **submit**. after this, select Settings tab and choose type of token (No e
 
 
 
-in your code, include the library and create a instance of DropbocManager:
+in your code, include the library and create a instance of DropboxManager:
 
 ```cpp
 #include "DropboxManager.h"
@@ -21,7 +21,7 @@ in your code, include the library and create a instance of DropbocManager:
 DropboxManager db;
 ```
 
-Then, initialize the DropbocManager
+Then, initialize the DropboxManager
 
 ```cpp
 db.begin("<YOUR TOKEN>");
@@ -30,13 +30,13 @@ db.begin("<YOUR TOKEN>");
 To download a file:
 
 ```cpp
-db.upload(PATH_IN_DROPBOX, FILE_NAME_IN_SPIFFS);
+db.download(PATH_IN_DROPBOX, FILE_NAME_IN_SPIFFS);
 ```
 
 Alternativaly, to save in SPIFFS with the same  Dropbox path filename:
 
 ```cpp
-db.upload(PATH_IN_DROPBOX);
+db.download(PATH_IN_DROPBOX);
 ```
 
 To upload a file in dropbox:
