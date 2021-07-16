@@ -7,6 +7,8 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 
+#include "streamUpdater.h"
+
 /// Class to download and upload files in Dropbox
 class DropboxManager{
 public:
@@ -24,6 +26,8 @@ public:
     /// if not provided, dropbox_path is used @return true if sucessfull download false otherwise.
     bool download(const char * path, const char * filename = nullptr, bool replace = false);
 
+    bool updateOTA(const char * path);
+
 protected:
     String _token;
     
@@ -32,8 +36,8 @@ protected:
 
     /// Upload or download file to/from Dropbox, mathod used internaly
     /// @param dropbox_path (optinal) name/path in Dropbox. @param file_pointer pointer to opened file 
-    //  s@return true if sucessfull upload/download false otherwise.
-    bool uploadOrDownload(String path, File * file, bool upload = true);
+    /// @return true if sucessfull upload/download false otherwise.
+    bool uploadOrDownload(String path, Stream *file, bool upload = false, size_t size = 0);
 };
 
 #endif
