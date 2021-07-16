@@ -7,6 +7,8 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 
+#include "streamUpdater.h"
+
 /// Class to download and upload files in Dropbox
 class DropboxManager{
 public:
@@ -24,6 +26,11 @@ public:
     /// if not provided, dropbox_path is used @return true if sucessfull download false otherwise.
     bool download(const char * path, const char * filename = nullptr, bool replace = false);
 
+    /// Download image (program or SPIFFS) and install in next OTA partition
+    /// @param path  name/path in Dropbox @param type (optional) image type StreamUpdater::type::FLASH_TYPE for program StreamUpdater::type::SPIFFS_TYPE to SPIFFS image, defaut - FLASH_TYPE
+    /// @param reboot (optional) if true reboot esp on sucessfull instalation - default true @return true if sucessfully update 
+    bool updateOTA(const char * path, StreamUpdater::type type = StreamUpdater::type::FLASH_TYPE, bool reboot = true);
+
 protected:
     String _token;
     
@@ -32,8 +39,8 @@ protected:
 
     /// Upload or download file to/from Dropbox, mathod used internaly
     /// @param dropbox_path (optinal) name/path in Dropbox. @param file_pointer pointer to opened file 
-    //  s@return true if sucessfull upload/download false otherwise.
-    bool uploadOrDownload(String path, File * file, bool upload = true);
+    /// @return true if sucessfull upload/download false otherwise.
+    bool uploadOrDownload(String path, Stream *file, bool upload = false, size_t size = 0);
 };
 
 #endif

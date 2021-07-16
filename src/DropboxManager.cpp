@@ -15,7 +15,7 @@ bool DropboxManager::upload(const char * filename, const char * path){
     File f = SPIFFS.open(filename, "rb+");
     // if path in dropbox isn' specified, use filename 
     if(path == nullptr) return uploadOrDownload(filename, &f);
-    return uploadOrDownload(path, &f);
+    return uploadOrDownload(path, &f, true, f.size());
 }
 
 bool DropboxManager::download(const char * path, const char * filename, bool replace){
@@ -25,15 +25,33 @@ bool DropboxManager::download(const char * path, const char * filename, bool rep
     if(SPIFFS.exists(name) && !replace) return false;
     File f = SPIFFS.open(name, "wb+");
     // if path in dropbox isn' specified, use filename 
-    return uploadOrDownload(path, &f, false);
+    return uploadOrDownload(path, &f);
 }
 
-bool DropboxManager::uploadOrDownload(String path, File * f, bool uploadMode){
+bool DropboxManager::updateOTA(const char * path, StreamUpdater::type type, bool reboot){
+    StreamUpdater updater;
+    // Begin Updater
+    if(updater.begin(UPDATE_SIZE_UNKNOWN, type)){
+        // Download to flash
+        uploadOrDownload(path, &updater);
+    }
+    // Try install update
+    if (updater.end(true)){
+        log_w("Update Success");
+        if (reboot){
+            log_w("Rebooting ...");  
+            ESP.restart();
+        }
+        return true;
+    }
+    return false;
+}
+
+bool DropboxManager::uploadOrDownload(String path, Stream * f, bool uploadMode, size_t size){
     bool status = false;
     HTTPClient http;
     WiFiClientSecure client;
     String endpoint = _endpoint;
-    int size = uploadMode? f->size() : 0;
 
     if (WiFi.status() ==  WL_CONNECTED){
         // begin http with correct endpoint (for upload or download)
