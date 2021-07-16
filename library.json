@@ -1,7 +1,7 @@
 {
     "name": "ESP32-DropboxManager",
-    "version": "1.0.0",
-    "description": "ESP-32 library for Dropbox handler, providing download and upload interface.",
+    "version": "1.0.1",
+    "description": "ESP-32 library for Dropbox handler, providing download and upload interface. Provide a interface to OTA update from dropbox stored image too",
     "keywords": "Dropbox, Manager",
     "repository":
     {
