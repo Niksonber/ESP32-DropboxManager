@@ -9,7 +9,8 @@ Before use this library, is necessary go to [Dropbox apps](https://www.dropbox.c
 
 Then, **submit**. after this, select Settings tab and choose type of token (No expiration or short live) then generate a token. (copy this and don't share with anyone).
 
-in your code, include the library and create a instance of DropbocManager:
+in your code, include the library and create a instance of DropboxManager:
+
 
 ```cpp
 #include "DropboxManager.h"
@@ -17,7 +18,7 @@ in your code, include the library and create a instance of DropbocManager:
 DropboxManager db;
 ```
 
-Then, initialize the DropbocManager
+Then, initialize the DropboxManager
 
 ```cpp
 db.begin("<YOUR TOKEN>");
