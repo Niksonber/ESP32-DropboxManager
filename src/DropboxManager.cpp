@@ -28,17 +28,21 @@ bool DropboxManager::download(const char * path, const char * filename, bool rep
     return uploadOrDownload(path, &f);
 }
 
-bool DropboxManager::updateOTA(const char * path){
+bool DropboxManager::updateOTA(const char * path, StreamUpdater::type type, bool reboot){
     StreamUpdater updater;
     // Begin Updater
-    if(updater.begin(UPDATE_SIZE_UNKNOWN)){
+    if(updater.begin(UPDATE_SIZE_UNKNOWN, type)){
         // Download to flash
         uploadOrDownload(path, &updater);
     }
     // Try install update
     if (updater.end(true)){
-        Serial.printf("Update Success\nRebooting...\n");
-        ESP.restart();
+        log_w("Update Success");
+        if (reboot){
+            log_w("Rebooting ...");  
+            ESP.restart();
+        }
+        return true;
     }
     return false;
 }

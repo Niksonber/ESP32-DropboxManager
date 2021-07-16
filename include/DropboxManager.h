@@ -26,7 +26,10 @@ public:
     /// if not provided, dropbox_path is used @return true if sucessfull download false otherwise.
     bool download(const char * path, const char * filename = nullptr, bool replace = false);
 
-    bool updateOTA(const char * path);
+    /// Download image (program or SPIFFS) and install in next OTA partition
+    /// @param path  name/path in Dropbox @param type (optional) image type StreamUpdater::type::FLASH_TYPE for program StreamUpdater::type::SPIFFS_TYPE to SPIFFS image, defaut - FLASH_TYPE
+    /// @param reboot (optional) if true reboot esp on sucessfull instalation - default true @return true if sucessfully update 
+    bool updateOTA(const char * path, StreamUpdater::type type = StreamUpdater::type::FLASH_TYPE, bool reboot = true);
 
 protected:
     String _token;
