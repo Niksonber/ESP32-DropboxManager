@@ -62,10 +62,10 @@ bool DropboxManager::uploadOrDownload(String path, Stream * f, bool uploadMode, 
         http.addHeader("Dropbox-API-Arg", "{\"path\": \"" + path + "\"}");
         http.addHeader("Content-Type", "application/octet-stream");
         //http post request, if sucess and download, send file
-        int ret = http.sendRequest("POST", f, size);
-        if (ret == HTTP_CODE_OK){
-            if(!uploadMode) size = http.writeToStream(f);
-            status = size > 0 || uploadMode;
+        if ( uploadMode ){
+            status = http.sendRequest("POST", f, size) == HTTP_CODE_OK;
+        } else if ( http.sendRequest("POST") == HTTP_CODE_OK){
+            status = http.writeToStream(f) > 0;
         }
     }
     return status;
