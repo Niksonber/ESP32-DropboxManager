@@ -13,7 +13,7 @@ bool DropboxManager::upload(const char * filename, const char * path){
     // check if file exists, then open
     if(!SPIFFS.exists(filename)) return false;
     File f = SPIFFS.open(filename, "rb+");
-    // if path in dropbox isn' specified, use filename 
+    // if path in dropbox isn' specified, use filename
     if(path == nullptr) return uploadOrDownload(filename, &f);
     return uploadOrDownload(path, &f, true, f.size());
 }
@@ -24,7 +24,7 @@ bool DropboxManager::download(const char * path, const char * filename, bool rep
     // check if file exists and replace replace tag
     if(SPIFFS.exists(name) && !replace) return false;
     File f = SPIFFS.open(name, "wb+");
-    // if path in dropbox isn' specified, use filename 
+    // if path in dropbox isn' specified, use filename
     return uploadOrDownload(path, &f);
 }
 
@@ -39,7 +39,7 @@ bool DropboxManager::updateOTA(const char * path, StreamUpdater::type type, bool
     if (updater.end(true)){
         log_w("Update Success");
         if (reboot){
-            log_w("Rebooting ...");  
+            log_w("Rebooting ...");
             ESP.restart();
         }
         return true;
@@ -59,7 +59,7 @@ bool DropboxManager::uploadOrDownload(String path, Stream * f, bool uploadMode, 
         http.begin(client, endpoint);
         // prepare http header
         http.addHeader("Authorization", "Bearer " + _token);
-        http.addHeader("Dropbox-API-Arg", "{\"path\": \"" + path + "\"}");
+        http.addHeader("Dropbox-API-Arg", "{\"path\": \"" + path + "\"" + (uploadMode? ", \"mode\": \"overwrite\"": "") + "}");
         http.addHeader("Content-Type", "application/octet-stream");
         //http post request, if sucess and download, send file
         if ( uploadMode ){
